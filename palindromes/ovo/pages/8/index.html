@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Red rum, sir, is murder — OVO</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #12081f;
+        color: #f7f1ff;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at top left, rgba(248, 207, 255, 0.55), transparent 55%),
+                    radial-gradient(circle at bottom right, rgba(39, 15, 66, 0.7), rgba(14, 10, 30, 0.95) 70%),
+                    var(--bg-overlay, rgba(0, 0, 0, 0.35));
+        z-index: 0;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: var(--bg-image);
+        background-size: cover;
+        background-position: center;
+        filter: saturate(1.1) brightness(0.8);
+        z-index: -1;
+        transform: scale(1.04);
+        transition: filter 320ms ease;
+      }
+
+      main {
+        z-index: 1;
+        flex: 1;
+        display: grid;
+        place-content: center;
+        text-align: center;
+        padding: clamp(2rem, 6vw, 4rem);
+      }
+
+      .page-label {
+        text-transform: uppercase;
+        letter-spacing: 0.4em;
+        font-size: clamp(0.7rem, 1.6vw, 1rem);
+        margin-bottom: 1.25rem;
+        opacity: 0.8;
+      }
+
+      .palindrome {
+        font-size: clamp(2.8rem, 7vw, 4.75rem);
+        letter-spacing: 0.05em;
+        margin: 0;
+        line-height: 1.1;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: fade-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .caption {
+        margin-top: clamp(1rem, 2vw, 1.75rem);
+        font-size: clamp(1rem, 2.2vw, 1.4rem);
+        color: rgba(247, 241, 255, 0.8);
+        max-width: 32ch;
+        margin-inline: auto;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: fade-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation-delay: 0.3s;
+      }
+
+      nav {
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: clamp(1.25rem, 4vw, 2.5rem);
+      }
+
+      .nav-arrow {
+        width: 3.25rem;
+        height: 3.25rem;
+        border-radius: 50%;
+        background: rgba(12, 6, 25, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #f7f1ff;
+        text-decoration: none;
+        font-size: 1.6rem;
+        box-shadow: 0 14px 28px rgba(7, 2, 22, 0.35);
+        transition: transform 180ms ease, background 180ms ease, opacity 180ms ease;
+      }
+
+      .nav-arrow:hover,
+      .nav-arrow:focus-visible {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(2px) scale(1.03);
+      }
+
+      .nav-arrow.disabled {
+        pointer-events: none;
+        opacity: 0.35;
+      }
+
+      .music-toggle {
+        position: fixed;
+        top: clamp(1.25rem, 4vw, 2rem);
+        right: clamp(1.25rem, 4vw, 2.25rem);
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        border: none;
+        background: rgba(12, 6, 25, 0.55);
+        color: #f7f1ff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 2;
+        box-shadow: 0 10px 22px rgba(6, 0, 20, 0.45);
+        transition: transform 200ms ease, background 200ms ease;
+      }
+
+      .music-toggle:hover,
+      .music-toggle:focus-visible {
+        transform: scale(1.06);
+        background: rgba(255, 255, 255, 0.28);
+        outline: none;
+      }
+
+      .music-toggle svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        fill: currentColor;
+      }
+
+      .music-toggle.is-playing {
+        background: rgba(255, 255, 255, 0.32);
+        color: #12081f;
+      }
+
+      @keyframes fade-in {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .palindrome,
+        .caption {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+
+        .nav-arrow,
+        .music-toggle {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body style="--bg-image: url('./image.jpg');" data-page="8">
+    <audio id="soundtrack" src="./track.mp3" preload="auto" hidden></audio>
+
+    <button class="music-toggle" type="button" aria-label="Toggle soundtrack" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M9 4.5v13.14a3.5 3.5 0 1 1-1.5-2.88V6.57l9-1.57v8.64a3.5 3.5 0 1 1-1.5-2.88V4.5L9 6.07z" />
+      </svg>
+    </button>
+
+    <main>
+      <p class="page-label">Palindrome 08</p>
+      <h1 class="palindrome">Red rum, sir, is murder</h1>
+      <p class="caption">A chilling sentence reversed.</p>
+    </main>
+
+    <nav>
+      <a class="nav-arrow nav-prev" href="../7/index.html" aria-label="Go to previous page">
+        <span aria-hidden="true">&#8592;</span>
+      </a>
+      <a class="nav-arrow nav-next" href="../9/index.html" aria-label="Go to next page"><span aria-hidden="true">&#8594;</span></a>
+    </nav>
+
+    <script>
+      const toggle = document.querySelector('.music-toggle');
+      const audio = document.getElementById('soundtrack');
+
+      if (toggle && audio) {
+        const setPressed = (isPlaying) => {
+          toggle.classList.toggle('is-playing', isPlaying);
+          toggle.setAttribute('aria-pressed', String(isPlaying));
+        };
+
+        toggle.addEventListener('click', () => {
+          if (audio.paused) {
+            audio.play().catch(() => { setPressed(false); });
+          } else {
+            audio.pause();
+          }
+        });
+
+        audio.addEventListener('play', () => setPressed(true));
+        audio.addEventListener('pause', () => setPressed(false));
+        audio.addEventListener('ended', () => setPressed(false));
+      }
+    </script>
+  </body>
+</html>

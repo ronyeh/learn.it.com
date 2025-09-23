@@ -47,6 +47,35 @@
         z-index: -3;
       }
 
+
+      .ephemeral-words {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: clamp(6rem, 32vh, 36vh);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .ephemeral-words .pal-word {
+        position: absolute;
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(14px);
+        transition: opacity 420ms ease, transform 420ms ease;
+        font-size: clamp(1.6rem, 4.2vw, 2.6rem);
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: rgba(247, 241, 255, 0.88);
+        text-shadow: 0 14px 28px rgba(0, 0, 30, 0.45);
+        white-space: nowrap;
+      }
+
+      .ephemeral-words .pal-word.is-visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+      }
+
       main {
         flex: 1;
         display: flex;
@@ -260,6 +289,10 @@
       </svg>
     </button>
 
+    <div class="ephemeral-words" aria-hidden="true">
+      <span class="pal-word"></span>
+    </div>
+
     <main>
       <div class="palindrome-card">
         <p class="page-label">Palindrome 03</p>
@@ -331,6 +364,41 @@
       };
 
       window.addEventListener('keydown', handleKeydown);
+
+      const ephemeralWord = document.querySelector('.ephemeral-words .pal-word');
+      const ephemeralArea = document.querySelector('.ephemeral-words');
+      if (ephemeralWord && ephemeralArea) {
+        const flashes = ['WOW', 'AHA', '!', 'O'];
+        let idx = 0;
+
+        const positionWord = () => {
+          const paddingPercent = 12;
+          const leftPercent = paddingPercent + Math.random() * (100 - paddingPercent * 2);
+          const topPercent = paddingPercent + Math.random() * (100 - paddingPercent * 2);
+          ephemeralWord.style.left = `${leftPercent}%`;
+          ephemeralWord.style.top = `${topPercent}%`;
+        };
+
+        const showWord = (nextIdx) => {
+          idx = nextIdx;
+          ephemeralWord.textContent = flashes[idx];
+          positionWord();
+          requestAnimationFrame(() => {
+            ephemeralWord.classList.add('is-visible');
+          });
+        };
+
+        showWord(0);
+
+        setInterval(() => {
+          ephemeralWord.classList.remove('is-visible');
+          const nextIdx = (idx + 1) % flashes.length;
+          setTimeout(() => {
+            showWord(nextIdx);
+          }, 220);
+        }, 2000);
+      }
+
     </script>
   </body>
 </html>

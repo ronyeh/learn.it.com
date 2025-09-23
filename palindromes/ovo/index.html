@@ -84,5 +84,16 @@
     <a class="nav-arrow" href="./pages/1/index.html" aria-label="Go to page 1">
       <span aria-hidden="true">&#8594;</span>
     </a>
+
+    <script>
+      const firstPageUrl = './pages/1/index.html';
+      window.addEventListener('keydown', (event) => {
+        const { key } = event;
+        if (key === 'ArrowRight' || key === 'ArrowDown') {
+          event.preventDefault();
+          window.location.assign(firstPageUrl);
+        }
+      });
+    </script>
   </body>
 </html>

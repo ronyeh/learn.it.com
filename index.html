@@ -1,5 +1,327 @@
-<html>
-  <body>
-    Hello!
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn It! | Craft Meets Curiosity</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: "Inter", "Helvetica Neue", "Segoe UI", system-ui, -apple-system, sans-serif;
+      --bg: #090b17;
+      --fg: #f6f5f2;
+      --muted: #b7bdca;
+      --accent: #ff8a5c;
+      --accent-2: #5c6ef7;
+      --glass: rgba(12, 15, 32, 0.55);
+      --card-bg: rgba(18, 22, 44, 0.72);
+      --shadow: 0 30px 60px -40px rgba(8, 12, 30, 0.9);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 18% 20%, rgba(255, 138, 92, 0.35), transparent 40%),
+                  radial-gradient(circle at 82% 5%, rgba(92, 110, 247, 0.28), transparent 42%),
+                  linear-gradient(140deg, #060711 0%, #11152c 55%, #080a18 100%);
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      letter-spacing: -0.01em;
+    }
+
+    header {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(4rem, 8vw, 6.5rem) clamp(1.5rem, 6vw, 5rem) clamp(3rem, 6vw, 5rem);
+      display: grid;
+      gap: clamp(1.5rem, 3vw, 2.75rem);
+      align-items: end;
+      isolation: isolate;
+    }
+
+    header::before,
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+    }
+
+    header::before {
+      background:
+        url('data:image/svg+xml,%3Csvg width="1200" height="800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"%3E%3Cfilter id="grain"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="1200" height="800" fill="%23252b4a"/%3E%3Crect width="1200" height="800" filter="url(%23grain)" opacity="0.45"/%3E%3C/svg%3E') center/cover;
+      mix-blend-mode: screen;
+      opacity: 0.7;
+    }
+
+    header::after {
+      background: linear-gradient(120deg, rgba(12, 16, 36, 0.9) 20%, rgba(12, 16, 36, 0.45) 55%, rgba(12, 16, 36, 0.95) 100%);
+      z-index: -1;
+    }
+
+    .intro-copy {
+      max-width: 48rem;
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+    }
+
+    .tagline {
+      margin: 0;
+      font-size: clamp(1.1rem, 2.8vw, 1.6rem);
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .cta a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1rem 2.75rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: #07080f;
+      background: linear-gradient(120deg, var(--accent) 0%, #ffc764 100%);
+      border-radius: 999px;
+      box-shadow: 0 18px 38px -20px rgba(255, 138, 92, 0.7);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .cta a:hover,
+    .cta a:focus {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 48px -22px rgba(255, 138, 92, 0.8);
+    }
+
+    .cta-note {
+      font-size: 0.95rem;
+      color: rgba(246, 245, 242, 0.75);
+    }
+
+    main {
+      flex: 1;
+      padding: 0 clamp(1.35rem, 5vw, 4rem) clamp(4rem, 8vw, 6rem);
+      display: grid;
+      gap: clamp(3rem, 6vw, 5rem);
+    }
+
+    .story {
+      display: grid;
+      gap: 2.5rem;
+      max-width: 60rem;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .story p {
+      margin: 0;
+      font-size: clamp(1.1rem, 2.6vw, 1.35rem);
+      line-height: 1.85;
+      color: rgba(246, 245, 242, 0.85);
+    }
+
+    .plates {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: clamp(1.75rem, 4vw, 2.75rem);
+      max-width: 70rem;
+      margin: 0 auto;
+    }
+
+    .plate {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 1.4rem;
+      padding: clamp(1.8rem, 3vw, 2.3rem);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+      overflow: hidden;
+      display: grid;
+      gap: 1rem;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .plate::before {
+      content: "";
+      position: absolute;
+      inset: -30% 10% 40% -20%;
+      background: linear-gradient(120deg, rgba(255, 138, 92, 0.18), rgba(92, 110, 247, 0.2));
+      filter: blur(40px);
+      z-index: -1;
+      transition: opacity 0.4s ease;
+    }
+
+    .plate:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 40px 70px -55px rgba(8, 12, 30, 0.85);
+    }
+
+    .plate:hover::before {
+      opacity: 0.85;
+    }
+
+    .plate h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      letter-spacing: -0.01em;
+    }
+
+    .plate p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(246, 245, 242, 0.78);
+    }
+
+    .plate em {
+      font-style: normal;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .quote {
+      position: relative;
+      max-width: 56rem;
+      margin: 0 auto;
+      padding: clamp(2.5rem, 5vw, 3.5rem);
+      background: var(--glass);
+      border-radius: 1.5rem;
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .quote::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(92, 110, 247, 0.35), transparent 55%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .quote p {
+      margin: 0;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      line-height: 1.6;
+      color: var(--fg);
+    }
+
+    .quote span {
+      display: block;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(246, 245, 242, 0.7);
+    }
+
+    footer {
+      padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: rgba(246, 245, 242, 0.6);
+    }
+
+    footer a {
+      color: var(--accent-2);
+      text-decoration: none;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        text-align: left;
+      }
+
+      .cta {
+        align-items: stretch;
+      }
+
+      .cta a {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="intro-copy">
+      <h1>Learn It!</h1>
+      <p class="tagline">Want to learn something new? Our experts will teach you!</p>
+      <div class="cta">
+        <a href="#get-started">Start Learning Today</a>
+        <span class="cta-note">Expert mentoring from $10/month · Live video calls included</span>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story" id="get-started">
+      <p>
+        Imagine the energy of a studio session blended with a masterclass: that is Learn It! We pair curious minds ages 12 to 120 with accomplished mentors who illuminate every lesson with real-world stories, live feedback, and the artistry of practiced craft.
+      </p>
+      <p>
+        Art, music, science, math, design—your passion is the canvas. Our mentors help you sketch the first line or sharpen your signature style with sessions that evolve alongside your goals.
+      </p>
+    </section>
+    <section class="plates" aria-label="Learn It! highlights">
+      <article class="plate">
+        <h2>Find an Expert Mentor</h2>
+        <p>
+          Browse a curated roster of creators and innovators. Each mentor is hand-selected for both skill and heart, so you get guidance that feels personal and cinematic.
+        </p>
+      </article>
+      <article class="plate">
+        <h2>Art / Music / Science / Math / and More</h2>
+        <p>
+          Switch disciplines without missing a beat. Explore photography lighting one week, then decode astrophysics the next—your learning journey is composed by you.
+        </p>
+      </article>
+      <article class="plate">
+        <h2>Expert Mentoring from $10 / Month</h2>
+        <p>
+          Choose a membership that fits your rhythm. Start with flexible sessions or commit to a long-term track, all with transparent pricing.
+        </p>
+      </article>
+      <article class="plate">
+        <h2>Live Video Calls With Your Expert</h2>
+        <p>
+          Go beyond tutorials with live, interactive calls. Share your screen, refine technique in real time, and capture breakthroughs as they happen.
+        </p>
+      </article>
+    </section>
+    <section class="quote" aria-label="Learn It! promise">
+      <p>
+        "When curiosity meets craft, the results are luminous. Learn It! brings the studio, the stage, and the lab to your screen—one inspiring mentor at a time."
+      </p>
+      <span>Learn It! Team</span>
+    </section>
+  </main>
+  <footer>
+    © <span id="year"></span> Learn It! All learners, all stories, always welcome. · <a href="#get-started">Begin your journey</a>
+  </footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
 </html>

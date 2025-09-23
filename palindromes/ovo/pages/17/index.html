@@ -217,9 +217,10 @@
       const audio = document.getElementById('soundtrack');
       const prevLink = document.querySelector('.nav-prev[href]');
       const nextLink = document.querySelector('.nav-next[href]');
+      let setPressed = () => {};
 
       if (toggle && audio) {
-        const setPressed = (isPlaying) => {
+        setPressed = (isPlaying) => {
           toggle.classList.toggle('is-playing', isPlaying);
           toggle.setAttribute('aria-pressed', String(isPlaying));
         };
@@ -237,9 +238,23 @@
         audio.addEventListener('ended', () => setPressed(false));
       }
 
-      const handleKeyNavigation = (event) => {
-        const { key } = event;
-        if (!key.startsWith('Arrow')) return;
+      const handleKeydown = (event) => {
+        const { key, code } = event;
+        const isSpace = key === ' ' || key === 'Spacebar' || code === 'Space';
+
+        if (isSpace && toggle && audio) {
+          event.preventDefault();
+          if (audio.paused) {
+            audio.play().catch(() => { setPressed(false); });
+          } else {
+            audio.pause();
+          }
+          return;
+        }
+
+        if (!(key && key.startsWith('Arrow'))) {
+          return;
+        }
 
         if (key === 'ArrowLeft' || key === 'ArrowUp') {
           if (prevLink) {
@@ -254,7 +269,7 @@
         }
       };
 
-      window.addEventListener('keydown', handleKeyNavigation);
+      window.addEventListener('keydown', handleKeydown);
     </script>
   </body>
 </html>
